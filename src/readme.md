@@ -30,6 +30,16 @@
 - error handling use app.use(err, req, res, next)
 
 
+- create a cluster on mongodb
+- install mongoose
+- connect application to Database using connection ur
+- call connectDB function and remember connection to Database before starting the server
+- create userSchema and userModel
+- create signup API to add data to database
+- push some documents from APIs
+- do error handling
+
+
 
 
 
