@@ -74,13 +74,12 @@ const {userAuth, adminAuth} = require("./middleware/auth")
 //     }
 // })
 
+app.use(express.json())
+
+//POST API to add user
 app.post("/signup", async (req, res) =>{
-    const user = new User({
-        firstName:"Om",
-        lastName:"Ingle",
-        email:"om@gmail.com",
-        gender:"male"
-    })
+    //console.log(req.body)
+    const user = new User(req.body)
 
     try{
         await user.save()
@@ -89,9 +88,64 @@ app.post("/signup", async (req, res) =>{
         console.log("Unable to add user data !!!")
         res.status(400).send("Unable to add user data")
     }
-
 })
 
+//GET API to get a particular user
+app.get("/users", async (req, res) =>{
+    try{
+        const useremail = req.body.email
+        const user =await User.find({"email": useremail})
+        if(user.lenght > 0){
+            res.send(user)
+        }else{
+            res.send("Unable to find user data")
+        }
+    }catch{
+        console.log("Unable to add user data !!!")
+        res.status(400).send("Unable to find user data")
+    }
+})
+
+// GET API to get the feed
+app.get("/feed", async (req, res) =>{
+    try{
+        
+        const user =await User.find({})
+        if(user){
+            res.send(user)
+        }else{
+            res.send("Unable to find user data")
+        }
+    }catch{
+        console.log("Unable to add user data !!!")
+        res.status(400).send("Unable to find user data")
+    }
+})
+
+//DELETE API to delete a user
+app.delete("/users", async (req, res)=>{
+    const userid = req.body.userid;
+    try{
+
+        const user = await User.findByIdAndDelete(userid)
+        res.send("User deleted successfully")
+    }catch{
+        res.status(404).send("Something went wrong")
+    }
+})
+
+//UPDATE API using
+app.patch("/users", async (req, res)=>{
+    const userid = req.body.userid;
+    try{
+        const data = req.body
+        const user = await User.findByIdAndUpdate(userid, data)
+        console.log(user)
+        res.send("User upaded successfully")
+    }catch{
+        res.status(404).send("Something went wrong")
+    }
+})
 
 connectDB()
     .then(()=>{

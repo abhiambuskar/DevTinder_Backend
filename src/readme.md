@@ -39,7 +39,16 @@
 - push some documents from APIs
 - do error handling
 
-
+- difference between json and javascript object
+- add express.json to the middleware
+- make your signup API dynamic to receive data from end user
+- Make an API for finding the user
+- Make an API for feed
+- User.findOne with duplicates email ids, which object is returned
+- Create delete user API
+- Explore mongoose documentation and methods
+- What are options in findByudpdate
+- API update wiht user and email id
 
 
 
