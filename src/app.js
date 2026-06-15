@@ -86,7 +86,7 @@ app.post("/signup", async (req, res) =>{
         res.send("User added successfully")
     }catch(err){
         console.log("Unable to add user data !!!")
-        res.status(400).send("Unable to add user data")
+        res.status(400).send("Unable to add user data" + err.message)
     }
 })
 
@@ -135,15 +135,26 @@ app.delete("/users", async (req, res)=>{
 })
 
 //UPDATE API using
-app.patch("/users", async (req, res)=>{
-    const userid = req.body.userid;
+app.patch("/users/:userid", async (req, res)=>{
+    const userid = req.params?.userid;
+    runValidators = true
+    const data = req.body
     try{
-        const data = req.body
+        
+        const ALLOWED_UPDATES = ["about", "age", "password"]
+
+        const isUpdateAllowed = Object.keys(data).every((k) =>
+            ALLOWED_UPDATES.includes(k)
+        )
+
+        if(!isUpdateAllowed){
+            throw new Error("Update not allowed");
+        }
         const user = await User.findByIdAndUpdate(userid, data)
         console.log(user)
         res.send("User upaded successfully")
-    }catch{
-        res.status(404).send("Something went wrong")
+    }catch(err){
+        res.status(404).send("Something went wrong " + err.message)
     }
 })
 
