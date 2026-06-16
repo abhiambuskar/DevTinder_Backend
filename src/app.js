@@ -3,8 +3,8 @@ const connectDB = require("./config/database")
 const app = express()
 const User = require("./models/user")
 const {userAuth, adminAuth} = require("./middleware/auth")
-
-
+const {validateData} = require("./utils/validations")
+const bcrypt = require("bcrypt")
 // app.use("/user", userAuth)
 
 // app.get("/testing", (req, res) =>{
@@ -79,16 +79,55 @@ app.use(express.json())
 //POST API to add user
 app.post("/signup", async (req, res) =>{
     //console.log(req.body)
-    const user = new User(req.body)
 
     try{
+        validateData(req)
+        const {firstName, lastName, email, password} = req.body
+
+        const passwordhash = await bcrypt.hash(password, 10)
+        console.log(passwordhash)
+
+        const user = new User({
+            firstName,
+            lastName,
+            email,
+            password: passwordhash
+        })
+
+        //const user = User(req.body)
+
         await user.save()
         res.send("User added successfully")
     }catch(err){
         console.log("Unable to add user data !!!")
-        res.status(400).send("Unable to add user data" + err.message)
+        res.status(400).send("Error: " + err.message)
     }
 })
+
+
+app.post("/login", async (req, res) =>{
+    try{
+        const {email, password} = req.body
+
+        const user = await User.findOne({email: email})
+        if(!user){
+            throw new Error("Invalid Credentails");
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+
+        if(isPasswordValid){
+            res.send("Login Successfully")
+        }else{
+            throw new Error("Incorrect Password")
+        }
+
+    }catch(err){
+        console.log("Unable to login!!!")
+        res.status(400).send("Error: " + err.message)
+    }
+})
+
 
 //GET API to get a particular user
 app.get("/users", async (req, res) =>{

@@ -50,6 +50,24 @@
 - What are options in findByudpdate
 - API update wiht user and email id
 
+- Explore schematypes
+- use trim, minlenght, min, max,
+- add default
+- create a custom validate function for gender
+- Improve DB schema put all the validations
+- Add Timestamps
+- Add API level validations on Patch request and signup post api
+- Data sanitiziing - add API validation for each field
+- Install validator
+- Explore validator library
+- Never trust req.body
+
+
+- validate data in signup data
+- install brcypt
+- create password hash with brcypt and save the user with crypted password
+- Create login API
+- compare passowrds, validate API and throw errors
 
 
 
