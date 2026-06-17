@@ -1,25 +1,27 @@
+const jwt = require("jsonwebtoken")
+const User = require("../models/user")
 
-const adminAuth =  (req, res, next) =>{
-    console.log("Admin getting checked")
-    const token = "xyz";
-    const authadmin = "xyz"
 
-    if(authadmin === "xyz"){
-        next();
-    }else{
-        res.status(401).send("Unauthorised access")
+const userAuth = async (req, res, next) =>{
+    try{
+        const {token} = req.cookies
+        if(!token){
+            throw new Error("Invalid credentails");
+        }
+
+        const decodedData = await jwt.verify(token, "SECRETKEY")
+        const {_id} = decodedData
+
+        const user = await User.findById(_id)
+        if(!user){
+            res.send("User doesn't exists")
+        }
+        req.body = user
+        next()
+    }catch(err){
+        res.status(400).send("ERROR :" + err.message)
+
     }
 }
 
-const userAuth =  (req, res, next) =>{
-    console.log("User getting checked")
-    const token = "xyz";
-    const authuser = "xyz"
-    if(authuser === "xyz"){
-        next();
-    }else{
-        res.status(401).send("Unauthorised access")
-    }
-}
-
-module.exports = {adminAuth, userAuth}
+module.exports = {userAuth}

@@ -69,9 +69,19 @@
 - Create login API
 - compare passowrds, validate API and throw errors
 
+- install cookiepareser, 
+- send dummy cookie to server send a response to 
+- create a get /profile API  to get the cookie back 
+- install jsonwebtoken
+- in login API after the email and password vertification create a JWT token and sent it back to the user in cookies
+- read the cookie from the response and get to know who is logged in
 
 
-
+- write the userauth middleware
+- add the userauth middleware in profile api and sendconnectionrequest API
+- set the jwt token expiry token
+- create userschmea method to getJWT() token
+- create userschema method to validate the passwords
 
 
 

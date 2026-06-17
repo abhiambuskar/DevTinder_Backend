@@ -5,6 +5,10 @@ const User = require("./models/user")
 const {userAuth, adminAuth} = require("./middleware/auth")
 const {validateData} = require("./utils/validations")
 const bcrypt = require("bcrypt")
+const cookieParser = require("cookie-parser")
+const jwt =  require("jsonwebtoken")
+
+
 // app.use("/user", userAuth)
 
 // app.get("/testing", (req, res) =>{
@@ -75,6 +79,7 @@ const bcrypt = require("bcrypt")
 // })
 
 app.use(express.json())
+app.use(cookieParser())
 
 //POST API to add user
 app.post("/signup", async (req, res) =>{
@@ -114,14 +119,40 @@ app.post("/login", async (req, res) =>{
             throw new Error("Invalid Credentails");
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password)
+        const isPasswordValid = await user.validatePassword(password)
 
         if(isPasswordValid){
+            const token = await user.getJWT()
+            res.cookie("token", token)
+            
             res.send("Login Successfully")
         }else{
             throw new Error("Incorrect Password")
         }
 
+    }catch(err){
+        console.log("Unable to login!!!")
+        res.status(400).send("Error: " + err.message)
+    }
+})
+
+app.post("/sendConnectionRequest", userAuth, async (req,res) =>{
+    try{
+        user = req.body
+        res.send(user.firstName + " sends connection request")
+    }catch(err){
+        console.log("Unable to login!!!")
+        res.status(400).send("Error: " + err.message)
+    }
+})
+
+
+//GET Profile 
+app.use("/profile", async (req, res) =>{
+    try{
+        const user = req.user
+        res.send(user)
+        
     }catch(err){
         console.log("Unable to login!!!")
         res.status(400).send("Error: " + err.message)
