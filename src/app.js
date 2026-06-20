@@ -81,152 +81,98 @@ const jwt =  require("jsonwebtoken")
 app.use(express.json())
 app.use(cookieParser())
 
-//POST API to add user
-app.post("/signup", async (req, res) =>{
-    //console.log(req.body)
+const authRouter = require("../src/routes/auth")
+const profileRouter = require("../src/routes/profile")
+const requestRouter = require("../src/routes/request")
 
-    try{
-        validateData(req)
-        const {firstName, lastName, email, password} = req.body
+app.use("/", authRouter)
+app.use("/", profileRouter)
+app.use("/", requestRouter)
 
-        const passwordhash = await bcrypt.hash(password, 10)
-        console.log(passwordhash)
-
-        const user = new User({
-            firstName,
-            lastName,
-            email,
-            password: passwordhash
-        })
-
-        //const user = User(req.body)
-
-        await user.save()
-        res.send("User added successfully")
-    }catch(err){
-        console.log("Unable to add user data !!!")
-        res.status(400).send("Error: " + err.message)
-    }
-})
-
-
-app.post("/login", async (req, res) =>{
-    try{
-        const {email, password} = req.body
-
-        const user = await User.findOne({email: email})
-        if(!user){
-            throw new Error("Invalid Credentails");
-        }
-
-        const isPasswordValid = await user.validatePassword(password)
-
-        if(isPasswordValid){
-            const token = await user.getJWT()
-            res.cookie("token", token)
-            
-            res.send("Login Successfully")
-        }else{
-            throw new Error("Incorrect Password")
-        }
-
-    }catch(err){
-        console.log("Unable to login!!!")
-        res.status(400).send("Error: " + err.message)
-    }
-})
-
-app.post("/sendConnectionRequest", userAuth, async (req,res) =>{
-    try{
-        user = req.body
-        res.send(user.firstName + " sends connection request")
-    }catch(err){
-        console.log("Unable to login!!!")
-        res.status(400).send("Error: " + err.message)
-    }
-})
-
-
-//GET Profile 
-app.use("/profile", async (req, res) =>{
-    try{
-        const user = req.user
-        res.send(user)
+// //GET Profile 
+// app.use("/profile", async (req, res) =>{
+//     try{
+//         const user = await req.user
+    
+//         res.send(user)
         
-    }catch(err){
-        console.log("Unable to login!!!")
-        res.status(400).send("Error: " + err.message)
-    }
-})
-
-
-//GET API to get a particular user
-app.get("/users", async (req, res) =>{
-    try{
-        const useremail = req.body.email
-        const user =await User.find({"email": useremail})
-        if(user.lenght > 0){
-            res.send(user)
-        }else{
-            res.send("Unable to find user data")
-        }
-    }catch{
-        console.log("Unable to add user data !!!")
-        res.status(400).send("Unable to find user data")
-    }
-})
-
-// GET API to get the feed
-app.get("/feed", async (req, res) =>{
-    try{
         
-        const user =await User.find({})
-        if(user){
-            res.send(user)
-        }else{
-            res.send("Unable to find user data")
-        }
-    }catch{
-        console.log("Unable to add user data !!!")
-        res.status(400).send("Unable to find user data")
-    }
-})
+//     }catch(err){
+//         console.log("Unable to login!!!")
+//         res.status(400).send("Error: " + err.message)
+//     }
+// })
 
-//DELETE API to delete a user
-app.delete("/users", async (req, res)=>{
-    const userid = req.body.userid;
-    try{
 
-        const user = await User.findByIdAndDelete(userid)
-        res.send("User deleted successfully")
-    }catch{
-        res.status(404).send("Something went wrong")
-    }
-})
 
-//UPDATE API using
-app.patch("/users/:userid", async (req, res)=>{
-    const userid = req.params?.userid;
-    runValidators = true
-    const data = req.body
-    try{
+
+// //GET API to get a particular user
+// app.get("/users", async (req, res) =>{
+//     try{
+//         const useremail = req.body.email
+//         const user =await User.find({"email": useremail})
+//         if(user.lenght > 0){
+//             res.send(user)
+//         }else{
+//             res.send("Unable to find user data")
+//         }
+//     }catch{
+//         console.log("Unable to add user data !!!")
+//         res.status(400).send("Unable to find user data")
+//     }
+// })
+
+// // GET API to get the feed
+// app.get("/feed", async (req, res) =>{
+//     try{
         
-        const ALLOWED_UPDATES = ["about", "age", "password"]
+//         const user =await User.find({})
+//         if(user){
+//             res.send(user)
+//         }else{
+//             res.send("Unable to find user data")
+//         }
+//     }catch{
+//         console.log("Unable to add user data !!!")
+//         res.status(400).send("Unable to find user data")
+//     }
+// })
 
-        const isUpdateAllowed = Object.keys(data).every((k) =>
-            ALLOWED_UPDATES.includes(k)
-        )
+// //DELETE API to delete a user
+// app.delete("/users", async (req, res)=>{
+//     const userid = req.body.userid;
+//     try{
 
-        if(!isUpdateAllowed){
-            throw new Error("Update not allowed");
-        }
-        const user = await User.findByIdAndUpdate(userid, data)
-        console.log(user)
-        res.send("User upaded successfully")
-    }catch(err){
-        res.status(404).send("Something went wrong " + err.message)
-    }
-})
+//         const user = await User.findByIdAndDelete(userid)
+//         res.send("User deleted successfully")
+//     }catch{
+//         res.status(404).send("Something went wrong")
+//     }
+// })
+
+// //UPDATE API using
+// app.patch("/users/:userid", async (req, res)=>{
+//     const userid = req.params?.userid;
+//     runValidators = true
+//     const data = req.body
+//     try{
+        
+//         const ALLOWED_UPDATES = ["about", "age", "password"]
+
+//         const isUpdateAllowed = Object.keys(data).every((k) =>
+//             ALLOWED_UPDATES.includes(k)
+//         )
+
+//         if(!isUpdateAllowed){
+//             throw new Error("Update not allowed");
+//         }
+//         const user = await User.findByIdAndUpdate(userid, data)
+//         console.log(user)
+//         res.send("User upaded successfully")
+//     }catch(err){
+//         res.status(404).send("Something went wrong " + err.message)
+//     }
+// })
 
 connectDB()
     .then(()=>{

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
-
+const cookieParser = require("cookie-parser")
 
 const userAuth = async (req, res, next) =>{
     try{
@@ -16,7 +16,7 @@ const userAuth = async (req, res, next) =>{
         if(!user){
             res.send("User doesn't exists")
         }
-        req.body = user
+        req.user = user
         next()
     }catch(err){
         res.status(400).send("ERROR :" + err.message)

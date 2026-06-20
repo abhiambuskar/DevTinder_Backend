@@ -12,7 +12,7 @@
 - create repo on git
 - push code on git
 - play with route and route extenstion
-- Order of routes mattes a lot
+- Order of routes matters a lot
 - install a postman
 - Write GET, POST , DELETE
 - use regex
@@ -47,7 +47,7 @@
 - User.findOne with duplicates email ids, which object is returned
 - Create delete user API
 - Explore mongoose documentation and methods
-- What are options in findByudpdate
+- What are options in findByIDudpdate
 - API update wiht user and email id
 
 - Explore schematypes
@@ -84,6 +84,16 @@
 - create userschema method to validate the passwords
 
 
+- Explore Tinder APIs
+- Create a list of APIs that you want to create
+- Group multiple routes under respective routers
+- read documentation for express.router
+- Create route folder for managing auth, profile, request routes
+- Create authRouter, profileRouter, requestRouter
+- Import these routers in app.js
+- Create logout API
+- Create patch edit api
+- Create PATCH password API, Forgot password api
 
 
 
