@@ -95,6 +95,14 @@
 - Create patch edit api
 - Create PATCH password API, Forgot password api
 
-
-
+- Create a connection request schema
+- Send connection request API
+- Proper validations of data
+- think about all corner cases
+- use $or ,$and query
+- schema.pre function 
+- Read about indexes
+- why do we need indexes
+- advantages and disadvantages of indexes
+- Read about indexes article in mongodb
 
