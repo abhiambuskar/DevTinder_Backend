@@ -106,3 +106,5 @@
 - advantages and disadvantages of indexes
 - Read about indexes article in mongodb
 
+- code with proper validations for request/reivew APIs
+- Though process POST VS GET
