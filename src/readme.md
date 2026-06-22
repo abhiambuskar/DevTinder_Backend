@@ -108,3 +108,10 @@
 
 - code with proper validations for request/reivew APIs
 - Though process POST VS GET
+- read about ref and populate
+- Create GET /user/request/received/ with all checks
+- Create GET user/connections
+
+- Logic for GET feed API
+- Explore the $nin, $ne and other query operator
+- Pagination
